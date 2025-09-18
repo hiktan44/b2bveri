@@ -1,0 +1,421 @@
+{% extends "base_saas.html" %}
+
+{% block title %}Dashboard - B2B Veri{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0">Dashboard</h1>
+            <p class="text-muted">Hoş geldiniz, {{ current_user.first_name }}!</p>
+        </div>
+        <div>
+            <a href="{{ url_for('main.search') }}" class="btn btn-primary">
+                <i class="fas fa-search me-2"></i>Yeni Arama
+            </a>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-primary bg-opacity-10 rounded p-3">
+                                <i class="fas fa-search text-primary"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="h4 mb-0">{{ stats.total_searches or 0 }}</div>
+                            <div class="text-muted small">Toplam Arama</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-success bg-opacity-10 rounded p-3">
+                                <i class="fas fa-calendar-day text-success"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="h4 mb-0">{{ stats.monthly_searches or 0 }}</div>
+                            <div class="text-muted small">Bu Ay</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-warning bg-opacity-10 rounded p-3">
+                                <i class="fas fa-chart-line text-warning"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="h4 mb-0">{{ stats.remaining_searches or 0 }}</div>
+                            <div class="text-muted small">Kalan Arama</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-info bg-opacity-10 rounded p-3">
+                                <i class="fas fa-download text-info"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="h4 mb-0">{{ stats.total_exports or 0 }}</div>
+                            <div class="text-muted small">Dışa Aktarım</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Recent Searches -->
+        <div class="col-lg-8 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 pb-0">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Son Aramalar</h5>
+                        <a href="{{ url_for('main.search_history') }}" class="btn btn-sm btn-outline-primary">
+                            Tümünü Gör
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% if recent_searches %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Arama Terimi</th>
+                                        <th>Konum</th>
+                                        <th>Sonuç</th>
+                                        <th>Tarih</th>
+                                        <th>İşlem</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for search in recent_searches %}
+                                    <tr>
+                                        <td>
+                                            <div class="fw-medium">{{ search.query }}</div>
+                                            {% if search.category %}
+                                                <small class="text-muted">{{ search.category }}</small>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-light text-dark">
+                                                {{ search.location or 'Türkiye' }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-primary">
+                                                {{ search.result_count }} sonuç
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <small class="text-muted">
+                                                {{ search.created_at.strftime('%d.%m.%Y %H:%M') }}
+                                            </small>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <a href="{{ url_for('main.search', q=search.query, location=search.location) }}" 
+                                                   class="btn btn-outline-primary btn-sm" title="Tekrar Ara">
+                                                    <i class="fas fa-redo"></i>
+                                                </a>
+                                                {% if search.export_url %}
+                                                <a href="{{ search.export_url }}" 
+                                                   class="btn btn-outline-success btn-sm" title="Dışa Aktar">
+                                                    <i class="fas fa-download"></i>
+                                                </a>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-search text-muted mb-3" style="font-size: 3rem;"></i>
+                            <h6 class="text-muted">Henüz arama yapmadınız</h6>
+                            <p class="text-muted mb-3">İlk aramanızı yapmak için aşağıdaki butona tıklayın</p>
+                            <a href="{{ url_for('main.search') }}" class="btn btn-primary">
+                                <i class="fas fa-search me-2"></i>Aramaya Başla
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Account Info & Quick Actions -->
+        <div class="col-lg-4">
+            <!-- Subscription Info -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-0 pb-0">
+                    <h5 class="mb-0">Abonelik Bilgileri</h5>
+                </div>
+                <div class="card-body">
+                    {% if current_user.subscription %}
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="flex-shrink-0">
+                                {% if current_user.subscription.plan.name == 'Pro' %}
+                                    <div class="bg-primary bg-opacity-10 rounded p-2">
+                                        <i class="fas fa-crown text-primary"></i>
+                                    </div>
+                                {% elif current_user.subscription.plan.name == 'Enterprise' %}
+                                    <div class="bg-warning bg-opacity-10 rounded p-2">
+                                        <i class="fas fa-gem text-warning"></i>
+                                    </div>
+                                {% else %}
+                                    <div class="bg-success bg-opacity-10 rounded p-2">
+                                        <i class="fas fa-user text-success"></i>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <div class="fw-medium">{{ current_user.subscription.plan.name }}</div>
+                                <small class="text-muted">
+                                    ₺{{ current_user.subscription.plan.price }}/ay
+                                </small>
+                            </div>
+                        </div>
+                        
+                        <!-- Usage Progress -->
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <small class="text-muted">Aylık Kullanım</small>
+                                <small class="text-muted">
+                                    {{ stats.monthly_searches or 0 }} / {{ current_user.subscription.plan.monthly_searches }}
+                                </small>
+                            </div>
+                            {% set usage_percent = ((stats.monthly_searches or 0) / current_user.subscription.plan.monthly_searches * 100) if current_user.subscription.plan.monthly_searches > 0 else 0 %}
+                            <div class="progress" style="height: 6px;">
+                                <div class="progress-bar" role="progressbar" 
+                                     style="width: {{ usage_percent }}%" 
+                                     aria-valuenow="{{ usage_percent }}" 
+                                     aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <div class="border-end">
+                                    <div class="h6 mb-0">{{ current_user.subscription.plan.results_per_search }}</div>
+                                    <small class="text-muted">Sonuç/Arama</small>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="h6 mb-0">
+                                    {% if current_user.subscription.plan.api_access %}
+                                        <i class="fas fa-check text-success"></i>
+                                    {% else %}
+                                        <i class="fas fa-times text-danger"></i>
+                                    {% endif %}
+                                </div>
+                                <small class="text-muted">API Erişimi</small>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-3">
+                            <small class="text-muted">
+                                Yenileme: {{ current_user.subscription.current_period_end.strftime('%d.%m.%Y') }}
+                            </small>
+                        </div>
+                        
+                        <div class="mt-3">
+                            <a href="{{ url_for('main.pricing') }}" class="btn btn-outline-primary btn-sm w-100">
+                                <i class="fas fa-arrow-up me-2"></i>Planı Yükselt
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-3">
+                            <i class="fas fa-exclamation-triangle text-warning mb-2" style="font-size: 2rem;"></i>
+                            <h6 class="text-muted">Aktif abonelik yok</h6>
+                            <p class="text-muted small mb-3">Aramaya başlamak için bir plan seçin</p>
+                            <a href="{{ url_for('main.pricing') }}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-credit-card me-2"></i>Plan Seç
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-0 pb-0">
+                    <h5 class="mb-0">Hızlı İşlemler</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('main.search') }}" class="btn btn-primary">
+                            <i class="fas fa-search me-2"></i>Yeni Arama
+                        </a>
+                        <a href="{{ url_for('main.search_history') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-history me-2"></i>Arama Geçmişi
+                        </a>
+                        {% if current_user.subscription and current_user.subscription.plan.api_access %}
+                        <a href="{{ url_for('profile') }}#api-keys" class="btn btn-outline-secondary">
+                            <i class="fas fa-key me-2"></i>API Anahtarları
+                        </a>
+                        {% endif %}
+                        <a href="{{ url_for('profile') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-user me-2"></i>Profil Ayarları
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API Usage (if applicable) -->
+            {% if current_user.subscription and current_user.subscription.plan.api_access %}
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 pb-0">
+                    <h5 class="mb-0">API Kullanımı</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <div class="border-end">
+                                <div class="h6 mb-0">{{ stats.api_calls_today or 0 }}</div>
+                                <small class="text-muted">Bugün</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="h6 mb-0">{{ stats.api_calls_month or 0 }}</div>
+                            <small class="text-muted">Bu Ay</small>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="{{ url_for('profile') }}#api-keys" class="btn btn-outline-primary btn-sm w-100">
+                            <i class="fas fa-cog me-2"></i>API Ayarları
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Usage Chart -->
+    {% if recent_searches %}
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 pb-0">
+                    <h5 class="mb-0">Kullanım Trendi (Son 30 Gün)</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="usageChart" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% if recent_searches %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+$(document).ready(function() {
+    // Usage Chart
+    const ctx = document.getElementById('usageChart').getContext('2d');
+    
+    // Sample data - in real app, this would come from backend
+    const chartData = {
+        labels: {{ chart_labels|safe if chart_labels else '[]' }},
+        datasets: [{
+            label: 'Günlük Arama Sayısı',
+            data: {{ chart_data|safe if chart_data else '[]' }},
+            borderColor: 'rgb(13, 110, 253)',
+            backgroundColor: 'rgba(13, 110, 253, 0.1)',
+            tension: 0.4,
+            fill: true
+        }]
+    };
+    
+    const config = {
+        type: 'line',
+        data: chartData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            },
+            elements: {
+                point: {
+                    radius: 4,
+                    hoverRadius: 6
+                }
+            }
+        }
+    };
+    
+    new Chart(ctx, config);
+    
+    // Auto-refresh stats every 5 minutes
+    setInterval(function() {
+        $.get('{{ url_for("main.dashboard") }}?ajax=1')
+            .done(function(data) {
+                if (data.stats) {
+                    // Update stats cards
+                    $('.h4').each(function(index) {
+                        const statKeys = ['total_searches', 'monthly_searches', 'remaining_searches', 'total_exports'];
+                        if (statKeys[index] && data.stats[statKeys[index]] !== undefined) {
+                            $(this).text(data.stats[statKeys[index]]);
+                        }
+                    });
+                    
+                    // Update progress bar
+                    if (data.usage_percent !== undefined) {
+                        $('.progress-bar').css('width', data.usage_percent + '%')
+                                         .attr('aria-valuenow', data.usage_percent);
+                    }
+                }
+            })
+            .fail(function() {
+                console.log('Stats refresh failed');
+            });
+    }, 300000); // 5 minutes
+});
+</script>
+{% endif %}
+{% endblock %}

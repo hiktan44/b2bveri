@@ -1,0 +1,629 @@
+{% extends "base_saas.html" %}
+
+{% block title %}Arama - B2B Veri{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Search Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <form method="GET" action="{{ url_for('main.search') }}" id="searchForm">
+                        <div class="row g-3">
+                            <div class="col-lg-4">
+                                <label for="query" class="form-label fw-medium">Arama Terimi</label>
+                                <input type="text" class="form-control" id="query" name="q" 
+                                       value="{{ request.args.get('q', '') }}" 
+                                       placeholder="Örn: restoran, kuaför, avukat" required>
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="location" class="form-label fw-medium">Konum</label>
+                                <select class="form-select" id="location" name="location">
+                                    <option value="Turkey" {{ 'selected' if request.args.get('location') == 'Turkey' else '' }}>Türkiye</option>
+                                    <option value="Istanbul, Turkey" {{ 'selected' if request.args.get('location') == 'Istanbul, Turkey' else '' }}>İstanbul</option>
+                                    <option value="Ankara, Turkey" {{ 'selected' if request.args.get('location') == 'Ankara, Turkey' else '' }}>Ankara</option>
+                                    <option value="Izmir, Turkey" {{ 'selected' if request.args.get('location') == 'Izmir, Turkey' else '' }}>İzmir</option>
+                                    <option value="Bursa, Turkey" {{ 'selected' if request.args.get('location') == 'Bursa, Turkey' else '' }}>Bursa</option>
+                                    <option value="Antalya, Turkey" {{ 'selected' if request.args.get('location') == 'Antalya, Turkey' else '' }}>Antalya</option>
+                                    <option value="Adana, Turkey" {{ 'selected' if request.args.get('location') == 'Adana, Turkey' else '' }}>Adana</option>
+                                    <option value="Konya, Turkey" {{ 'selected' if request.args.get('location') == 'Konya, Turkey' else '' }}>Konya</option>
+                                    <option value="Gaziantep, Turkey" {{ 'selected' if request.args.get('location') == 'Gaziantep, Turkey' else '' }}>Gaziantep</option>
+                                    <option value="Kayseri, Turkey" {{ 'selected' if request.args.get('location') == 'Kayseri, Turkey' else '' }}>Kayseri</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-2">
+                                <label for="num" class="form-label fw-medium">Sonuç Sayısı</label>
+                                <select class="form-select" id="num" name="num">
+                                    <option value="10" {{ 'selected' if request.args.get('num') == '10' else '' }}>10</option>
+                                    <option value="25" {{ 'selected' if request.args.get('num') == '25' else '' }}>25</option>
+                                    <option value="50" {{ 'selected' if request.args.get('num') == '50' else '' }}>50</option>
+                                    <option value="100" {{ 'selected' if request.args.get('num') == '100' else '' }}>100</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-3">
+                                <label class="form-label">&nbsp;</label>
+                                <div class="d-flex gap-2">
+                                    <button type="submit" class="btn btn-primary flex-fill" id="searchBtn">
+                                        <i class="fas fa-search me-2"></i>Ara
+                                    </button>
+                                    {% if results %}
+                                    <button type="button" class="btn btn-success" id="exportBtn" title="Dışa Aktar">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Advanced Filters -->
+                        <div class="collapse" id="advancedFilters">
+                            <hr class="my-3">
+                            <div class="row g-3">
+                                <div class="col-lg-3">
+                                    <label for="category" class="form-label fw-medium">Kategori</label>
+                                    <select class="form-select" id="category" name="category">
+                                        <option value="">Tüm Kategoriler</option>
+                                        <option value="restaurant" {{ 'selected' if request.args.get('category') == 'restaurant' else '' }}>Restoran</option>
+                                        <option value="hotel" {{ 'selected' if request.args.get('category') == 'hotel' else '' }}>Otel</option>
+                                        <option value="shopping" {{ 'selected' if request.args.get('category') == 'shopping' else '' }}>Alışveriş</option>
+                                        <option value="health" {{ 'selected' if request.args.get('category') == 'health' else '' }}>Sağlık</option>
+                                        <option value="education" {{ 'selected' if request.args.get('category') == 'education' else '' }}>Eğitim</option>
+                                        <option value="automotive" {{ 'selected' if request.args.get('category') == 'automotive' else '' }}>Otomotiv</option>
+                                        <option value="beauty" {{ 'selected' if request.args.get('category') == 'beauty' else '' }}>Güzellik</option>
+                                        <option value="finance" {{ 'selected' if request.args.get('category') == 'finance' else '' }}>Finans</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-3">
+                                    <label for="rating" class="form-label fw-medium">Minimum Puan</label>
+                                    <select class="form-select" id="rating" name="rating">
+                                        <option value="">Tüm Puanlar</option>
+                                        <option value="4" {{ 'selected' if request.args.get('rating') == '4' else '' }}>4+ Yıldız</option>
+                                        <option value="3" {{ 'selected' if request.args.get('rating') == '3' else '' }}>3+ Yıldız</option>
+                                        <option value="2" {{ 'selected' if request.args.get('rating') == '2' else '' }}>2+ Yıldız</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-3">
+                                    <label for="price_level" class="form-label fw-medium">Fiyat Seviyesi</label>
+                                    <select class="form-select" id="price_level" name="price_level">
+                                        <option value="">Tüm Fiyatlar</option>
+                                        <option value="1" {{ 'selected' if request.args.get('price_level') == '1' else '' }}>$ (Ekonomik)</option>
+                                        <option value="2" {{ 'selected' if request.args.get('price_level') == '2' else '' }}>$$ (Orta)</option>
+                                        <option value="3" {{ 'selected' if request.args.get('price_level') == '3' else '' }}>$$$ (Pahalı)</option>
+                                        <option value="4" {{ 'selected' if request.args.get('price_level') == '4' else '' }}>$$$$ (Çok Pahalı)</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-3">
+                                    <label for="open_now" class="form-label fw-medium">Durum</label>
+                                    <div class="form-check mt-2">
+                                        <input class="form-check-input" type="checkbox" id="open_now" name="open_now" 
+                                               {{ 'checked' if request.args.get('open_now') else '' }}>
+                                        <label class="form-check-label" for="open_now">
+                                            Şu anda açık
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-3">
+                            <button type="button" class="btn btn-link p-0 text-decoration-none" 
+                                    data-bs-toggle="collapse" data-bs-target="#advancedFilters">
+                                <i class="fas fa-filter me-1"></i>Gelişmiş Filtreler
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Results -->
+    {% if results %}
+    <div class="row">
+        <div class="col-12">
+            <!-- Results Header -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h5 class="mb-0">Arama Sonuçları</h5>
+                    <small class="text-muted">
+                        "{{ request.args.get('q', '') }}" için {{ results|length }} sonuç bulundu
+                        {% if request.args.get('location') and request.args.get('location') != 'Turkey' %}
+                            - {{ request.args.get('location') }}
+                        {% endif %}
+                    </small>
+                </div>
+                <div class="d-flex gap-2">
+                    <div class="dropdown">
+                        <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" 
+                                data-bs-toggle="dropdown">
+                            <i class="fas fa-sort me-1"></i>Sırala
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" data-sort="relevance">İlgiye Göre</a></li>
+                            <li><a class="dropdown-item" href="#" data-sort="rating">Puana Göre</a></li>
+                            <li><a class="dropdown-item" href="#" data-sort="name">İsme Göre</a></li>
+                            <li><a class="dropdown-item" href="#" data-sort="distance">Mesafeye Göre</a></li>
+                        </ul>
+                    </div>
+                    <div class="btn-group btn-group-sm" role="group">
+                        <input type="radio" class="btn-check" name="view" id="listView" checked>
+                        <label class="btn btn-outline-secondary" for="listView">
+                            <i class="fas fa-list"></i>
+                        </label>
+                        <input type="radio" class="btn-check" name="view" id="gridView">
+                        <label class="btn btn-outline-secondary" for="gridView">
+                            <i class="fas fa-th"></i>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results List -->
+            <div id="resultsList">
+                {% for result in results %}
+                <div class="card border-0 shadow-sm mb-3 result-item" data-rating="{{ result.rating or 0 }}" data-name="{{ result.name }}">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="d-flex align-items-start">
+                                    <div class="flex-shrink-0 me-3">
+                                        {% if result.photos and result.photos|length > 0 %}
+                                            <img src="{{ result.photos[0] }}" alt="{{ result.name }}" 
+                                                 class="rounded" style="width: 80px; height: 80px; object-fit: cover;">
+                                        {% else %}
+                                            <div class="bg-light rounded d-flex align-items-center justify-content-center" 
+                                                 style="width: 80px; height: 80px;">
+                                                <i class="fas fa-building text-muted"></i>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="fw-bold mb-1">{{ result.name }}</h6>
+                                        
+                                        {% if result.rating %}
+                                        <div class="d-flex align-items-center mb-2">
+                                            <div class="text-warning me-2">
+                                                {% for i in range(5) %}
+                                                    {% if i < result.rating|int %}
+                                                        <i class="fas fa-star"></i>
+                                                    {% elif i < result.rating %}
+                                                        <i class="fas fa-star-half-alt"></i>
+                                                    {% else %}
+                                                        <i class="far fa-star"></i>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                            <span class="fw-medium me-2">{{ "%.1f"|format(result.rating) }}</span>
+                                            {% if result.user_ratings_total %}
+                                                <small class="text-muted">({{ result.user_ratings_total }} değerlendirme)</small>
+                                            {% endif %}
+                                        </div>
+                                        {% endif %}
+                                        
+                                        {% if result.types %}
+                                        <div class="mb-2">
+                                            {% for type in result.types[:3] %}
+                                                <span class="badge bg-light text-dark me-1">{{ type.replace('_', ' ').title() }}</span>
+                                            {% endfor %}
+                                        </div>
+                                        {% endif %}
+                                        
+                                        {% if result.formatted_address %}
+                                        <div class="text-muted mb-2">
+                                            <i class="fas fa-map-marker-alt me-1"></i>
+                                            {{ result.formatted_address }}
+                                        </div>
+                                        {% endif %}
+                                        
+                                        {% if result.formatted_phone_number %}
+                                        <div class="text-muted mb-2">
+                                            <i class="fas fa-phone me-1"></i>
+                                            <a href="tel:{{ result.formatted_phone_number }}" class="text-decoration-none">
+                                                {{ result.formatted_phone_number }}
+                                            </a>
+                                        </div>
+                                        {% endif %}
+                                        
+                                        {% if result.website %}
+                                        <div class="text-muted mb-2">
+                                            <i class="fas fa-globe me-1"></i>
+                                            <a href="{{ result.website }}" target="_blank" class="text-decoration-none">
+                                                Web Sitesi <i class="fas fa-external-link-alt ms-1 small"></i>
+                                            </a>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-lg-4">
+                                <div class="text-end">
+                                    {% if result.price_level %}
+                                    <div class="mb-2">
+                                        <span class="text-muted">Fiyat: </span>
+                                        {% for i in range(result.price_level) %}
+                                            <span class="text-success">$</span>
+                                        {% endfor %}
+                                        {% for i in range(4 - result.price_level) %}
+                                            <span class="text-muted">$</span>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                    
+                                    {% if result.opening_hours %}
+                                    <div class="mb-2">
+                                        {% if result.opening_hours.open_now %}
+                                            <span class="badge bg-success">Açık</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Kapalı</span>
+                                        {% endif %}
+                                    </div>
+                                    {% endif %}
+                                    
+                                    <div class="btn-group-vertical btn-group-sm w-100">
+                                        {% if result.geometry and result.geometry.location %}
+                                        <a href="https://www.google.com/maps/search/?api=1&query={{ result.geometry.location.lat }},{{ result.geometry.location.lng }}" 
+                                           target="_blank" class="btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-map me-1"></i>Haritada Gör
+                                        </a>
+                                        {% endif %}
+                                        
+                                        {% if result.place_id %}
+                                        <button type="button" class="btn btn-outline-secondary btn-sm" 
+                                                onclick="saveToFavorites('{{ result.place_id }}', '{{ result.name }}')">
+                                            <i class="far fa-heart me-1"></i>Favorile
+                                        </button>
+                                        {% endif %}
+                                        
+                                        <button type="button" class="btn btn-outline-info btn-sm" 
+                                                onclick="shareResult('{{ result.name }}', '{{ result.formatted_address }}')">
+                                            <i class="fas fa-share me-1"></i>Paylaş
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Additional Details (Collapsible) -->
+                        {% if result.reviews or result.opening_hours %}
+                        <div class="mt-3">
+                            <button class="btn btn-link p-0 text-decoration-none" type="button" 
+                                    data-bs-toggle="collapse" data-bs-target="#details{{ loop.index }}">
+                                <i class="fas fa-chevron-down me-1"></i>Detayları Gör
+                            </button>
+                            
+                            <div class="collapse" id="details{{ loop.index }}">
+                                <div class="mt-3">
+                                    {% if result.opening_hours and result.opening_hours.weekday_text %}
+                                    <div class="mb-3">
+                                        <h6 class="fw-bold">Çalışma Saatleri</h6>
+                                        <div class="row">
+                                            {% for hours in result.opening_hours.weekday_text %}
+                                            <div class="col-md-6">
+                                                <small class="text-muted">{{ hours }}</small>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    
+                                    {% if result.reviews %}
+                                    <div>
+                                        <h6 class="fw-bold">Son Yorumlar</h6>
+                                        {% for review in result.reviews[:2] %}
+                                        <div class="border-start border-3 border-light ps-3 mb-2">
+                                            <div class="d-flex align-items-center mb-1">
+                                                <div class="text-warning me-2">
+                                                    {% for i in range(5) %}
+                                                        {% if i < review.rating %}
+                                                            <i class="fas fa-star small"></i>
+                                                        {% else %}
+                                                            <i class="far fa-star small"></i>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                                <small class="fw-medium">{{ review.author_name }}</small>
+                                                <small class="text-muted ms-2">{{ review.relative_time_description }}</small>
+                                            </div>
+                                            <small class="text-muted">{{ review.text[:150] }}{% if review.text|length > 150 %}...{% endif %}</small>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Load More Button -->
+            {% if results|length >= (request.args.get('num', 10)|int) %}
+            <div class="text-center mt-4">
+                <button type="button" class="btn btn-outline-primary" id="loadMoreBtn">
+                    <i class="fas fa-plus me-2"></i>Daha Fazla Sonuç Yükle
+                </button>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Export Modal -->
+    <div class="modal fade" id="exportModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Sonuçları Dışa Aktar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="exportForm">
+                        <div class="mb-3">
+                            <label class="form-label fw-medium">Dışa Aktarım Formatı</label>
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="format" id="formatExcel" value="excel" checked>
+                                        <label class="form-check-label" for="formatExcel">
+                                            <i class="fas fa-file-excel text-success me-1"></i>Excel
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="format" id="formatCSV" value="csv">
+                                        <label class="form-check-label" for="formatCSV">
+                                            <i class="fas fa-file-csv text-info me-1"></i>CSV
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="format" id="formatJSON" value="json">
+                                        <label class="form-check-label" for="formatJSON">
+                                            <i class="fas fa-file-code text-warning me-1"></i>JSON
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-medium">Dahil Edilecek Alanlar</label>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="fieldName" value="name" checked>
+                                        <label class="form-check-label" for="fieldName">İşletme Adı</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="fieldAddress" value="address" checked>
+                                        <label class="form-check-label" for="fieldAddress">Adres</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="fieldPhone" value="phone" checked>
+                                        <label class="form-check-label" for="fieldPhone">Telefon</label>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="fieldWebsite" value="website">
+                                        <label class="form-check-label" for="fieldWebsite">Web Sitesi</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="fieldRating" value="rating">
+                                        <label class="form-check-label" for="fieldRating">Puan</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="fieldTypes" value="types">
+                                        <label class="form-check-label" for="fieldTypes">Kategoriler</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>{{ results|length }}</strong> sonuç dışa aktarılacak.
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="button" class="btn btn-success" id="confirmExport">
+                        <i class="fas fa-download me-2"></i>Dışa Aktar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% elif request.args.get('q') %}
+    <!-- No Results -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center py-5">
+                    <i class="fas fa-search text-muted mb-3" style="font-size: 4rem;"></i>
+                    <h4 class="text-muted mb-3">Sonuç Bulunamadı</h4>
+                    <p class="text-muted mb-4">
+                        "{{ request.args.get('q', '') }}" araması için sonuç bulunamadı.
+                        {% if request.args.get('location') and request.args.get('location') != 'Turkey' %}
+                            {{ request.args.get('location') }} bölgesinde
+                        {% endif %}
+                    </p>
+                    
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <div class="card bg-light border-0">
+                                <div class="card-body">
+                                    <h6 class="fw-bold mb-3">Arama İpuçları:</h6>
+                                    <ul class="list-unstyled text-start">
+                                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Daha genel terimler kullanın</li>
+                                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Yazım hatalarını kontrol edin</li>
+                                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Farklı anahtar kelimeler deneyin</li>
+                                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Konum filtresini genişletin</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <button type="button" class="btn btn-primary me-2" onclick="clearSearch()">
+                            <i class="fas fa-redo me-2"></i>Yeni Arama
+                        </button>
+                        <a href="{{ url_for('main.search_history') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-history me-2"></i>Arama Geçmişi
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Search form handling
+    $('#searchForm').on('submit', function(e) {
+        const query = $('#query').val().trim();
+        if (!query) {
+            e.preventDefault();
+            showToast('Lütfen arama terimi girin.', 'warning');
+            $('#query').focus();
+            return;
+        }
+        
+        // Show loading state
+        $('#searchBtn').prop('disabled', true)
+                      .html('<i class="fas fa-spinner fa-spin me-2"></i>Aranıyor...');
+    });
+    
+    // Export functionality
+    $('#exportBtn').on('click', function() {
+        $('#exportModal').modal('show');
+    });
+    
+    $('#confirmExport').on('click', function() {
+        const format = $('input[name="format"]:checked').val();
+        const fields = [];
+        $('input[type="checkbox"]:checked').each(function() {
+            if ($(this).val() !== 'on') {
+                fields.push($(this).val());
+            }
+        });
+        
+        if (fields.length === 0) {
+            showToast('Lütfen en az bir alan seçin.', 'warning');
+            return;
+        }
+        
+        // Create export URL
+        const params = new URLSearchParams(window.location.search);
+        params.set('export', format);
+        params.set('fields', fields.join(','));
+        
+        // Start download
+        window.location.href = '{{ url_for("main.export") }}?' + params.toString();
+        
+        $('#exportModal').modal('hide');
+        showToast('Dışa aktarım başlatıldı.', 'success');
+    });
+    
+    // Sorting functionality
+    $('.dropdown-item[data-sort]').on('click', function(e) {
+        e.preventDefault();
+        const sortBy = $(this).data('sort');
+        sortResults(sortBy);
+    });
+    
+    // View toggle
+    $('input[name="view"]').on('change', function() {
+        if ($(this).attr('id') === 'gridView') {
+            $('#resultsList').addClass('row');
+            $('.result-item').addClass('col-lg-6 col-xl-4');
+        } else {
+            $('#resultsList').removeClass('row');
+            $('.result-item').removeClass('col-lg-6 col-xl-4');
+        }
+    });
+    
+    // Load more results
+    $('#loadMoreBtn').on('click', function() {
+        const currentNum = parseInt('{{ request.args.get("num", 10) }}');
+        const params = new URLSearchParams(window.location.search);
+        params.set('num', currentNum + 25);
+        
+        window.location.href = window.location.pathname + '?' + params.toString();
+    });
+});
+
+// Helper functions
+function sortResults(sortBy) {
+    const container = $('#resultsList');
+    const items = container.children('.result-item').get();
+    
+    items.sort(function(a, b) {
+        let aVal, bVal;
+        
+        switch(sortBy) {
+            case 'rating':
+                aVal = parseFloat($(a).data('rating')) || 0;
+                bVal = parseFloat($(b).data('rating')) || 0;
+                return bVal - aVal; // Descending
+            case 'name':
+                aVal = $(a).data('name').toLowerCase();
+                bVal = $(b).data('name').toLowerCase();
+                return aVal.localeCompare(bVal);
+            default:
+                return 0; // Keep original order for relevance
+        }
+    });
+    
+    $.each(items, function(index, item) {
+        container.append(item);
+    });
+    
+    showToast('Sonuçlar sıralandı.', 'info');
+}
+
+function saveToFavorites(placeId, name) {
+    // Implementation for saving to favorites
+    showToast(name + ' favorilere eklendi.', 'success');
+}
+
+function shareResult(name, address) {
+    if (navigator.share) {
+        navigator.share({
+            title: name,
+            text: address,
+            url: window.location.href
+        });
+    } else {
+        // Fallback: copy to clipboard
+        const text = name + '\n' + address + '\n' + window.location.href;
+        navigator.clipboard.writeText(text).then(function() {
+            showToast('Bilgiler panoya kopyalandı.', 'success');
+        });
+    }
+}
+
+function clearSearch() {
+    $('#query').val('');
+    $('#location').val('Turkey');
+    $('#num').val('10');
+    $('#category').val('');
+    $('#rating').val('');
+    $('#price_level').val('');
+    $('#open_now').prop('checked', false);
+    $('#query').focus();
+}
+</script>
+{% endblock %}

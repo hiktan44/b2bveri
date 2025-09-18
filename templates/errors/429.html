@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Çok Fazla İstek - 429</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #9c27b0 0%, #673ab7 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .error-container {
+            text-align: center;
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 500px;
+            margin: 2rem;
+        }
+        .error-code {
+            font-size: 6rem;
+            font-weight: bold;
+            color: #9c27b0;
+            margin: 0;
+            line-height: 1;
+        }
+        .error-message {
+            font-size: 1.5rem;
+            color: #333;
+            margin: 1rem 0;
+        }
+        .error-description {
+            color: #666;
+            margin: 1rem 0 2rem;
+            line-height: 1.6;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #9c27b0;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            margin: 0 10px;
+        }
+        .btn:hover {
+            background: #8e24aa;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(156, 39, 176, 0.3);
+        }
+        .btn-secondary {
+            background: #6c757d;
+        }
+        .btn-secondary:hover {
+            background: #5a6268;
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+        }
+        .countdown {
+            font-size: 1.2rem;
+            color: #9c27b0;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1 class="error-code">429</h1>
+        <h2 class="error-message">Çok Fazla İstek</h2>
+        <p class="error-description">
+            Çok fazla istek gönderdiniz. Lütfen bir süre bekleyip tekrar deneyiniz.
+            Bu sınırlama spam ve kötüye kullanımı önlemek için uygulanmaktadır.
+        </p>
+        <div class="countdown" id="countdown">Lütfen 60 saniye bekleyiniz...</div>
+        <a href="{{ url_for('index') }}" class="btn">Ana Sayfaya Dön</a>
+        <a href="javascript:history.back()" class="btn btn-secondary">Geri Dön</a>
+    </div>
+    
+    <script>
+        let seconds = 60;
+        const countdownElement = document.getElementById('countdown');
+        
+        const timer = setInterval(() => {
+            seconds--;
+            if (seconds > 0) {
+                countdownElement.textContent = `Lütfen ${seconds} saniye bekleyiniz...`;
+            } else {
+                countdownElement.textContent = 'Artık tekrar deneyebilirsiniz.';
+                countdownElement.style.color = '#4caf50';
+                clearInterval(timer);
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

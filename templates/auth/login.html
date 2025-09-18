@@ -1,0 +1,354 @@
+{% extends "base_saas.html" %}
+
+{% block title %}Giriş Yap - B2B Veri{% endblock %}
+
+{% block extra_css %}
+<style>
+    .auth-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 20px;
+    }
+    
+    .auth-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        padding: 40px;
+        width: 100%;
+        max-width: 400px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .auth-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+    }
+    
+    .auth-logo {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .auth-logo h1 {
+        font-size: 32px;
+        font-weight: 700;
+        color: #2563eb;
+        margin: 0;
+    }
+    
+    .auth-logo p {
+        color: #6b7280;
+        margin: 5px 0 0 0;
+        font-size: 14px;
+    }
+    
+    .auth-title {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .auth-title h2 {
+        font-size: 24px;
+        color: #1f2937;
+        margin: 0 0 10px 0;
+    }
+    
+    .auth-title p {
+        color: #6b7280;
+        margin: 0;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #374151;
+        font-size: 14px;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e5e7eb;
+        border-radius: 10px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        background-color: #f9fafb;
+    }
+    
+    .form-control:focus {
+        outline: none;
+        border-color: #2563eb;
+        background-color: white;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    
+    .form-check {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    
+    .form-check-input {
+        margin-right: 8px;
+        width: 18px;
+        height: 18px;
+    }
+    
+    .form-check-label {
+        font-size: 14px;
+        color: #6b7280;
+        cursor: pointer;
+    }
+    
+    .btn-primary {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+    
+    .auth-links {
+        text-align: center;
+        margin-top: 20px;
+    }
+    
+    .auth-links a {
+        color: #2563eb;
+        text-decoration: none;
+        font-size: 14px;
+        transition: color 0.3s ease;
+    }
+    
+    .auth-links a:hover {
+        color: #1d4ed8;
+        text-decoration: underline;
+    }
+    
+    .divider {
+        text-align: center;
+        margin: 20px 0;
+        position: relative;
+    }
+    
+    .divider::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: #e5e7eb;
+    }
+    
+    .divider span {
+        background: white;
+        padding: 0 15px;
+        color: #6b7280;
+        font-size: 14px;
+    }
+    
+    .alert {
+        padding: 12px 16px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+    
+    .alert-success {
+        background-color: #d1fae5;
+        border: 1px solid #10b981;
+        color: #065f46;
+    }
+    
+    .alert-error {
+        background-color: #fee2e2;
+        border: 1px solid #ef4444;
+        color: #991b1b;
+    }
+    
+    .alert-info {
+        background-color: #dbeafe;
+        border: 1px solid #3b82f6;
+        color: #1e40af;
+    }
+    
+    .alert-warning {
+        background-color: #fef3c7;
+        border: 1px solid #f59e0b;
+        color: #92400e;
+    }
+    
+    @media (max-width: 480px) {
+        .auth-card {
+            padding: 30px 20px;
+            margin: 10px;
+        }
+        
+        .auth-logo h1 {
+            font-size: 28px;
+        }
+        
+        .auth-title h2 {
+            font-size: 20px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-logo">
+            <h1>B2B Veri</h1>
+            <p>İş Geliştirme Platformu</p>
+        </div>
+        
+        <div class="auth-title">
+            <h2>Hoş Geldiniz</h2>
+            <p>Hesabınıza giriş yapın</p>
+        </div>
+        
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'error' if category == 'error' else category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <form method="POST" novalidate>
+            {{ form.hidden_tag() }}
+            
+            <div class="form-group">
+                {{ form.email.label(class="form-label") }}
+                {{ form.email(class="form-control", placeholder="ornek@sirket.com", autocomplete="email") }}
+                {% if form.email.errors %}
+                    <div class="text-danger mt-1">
+                        {% for error in form.email.errors %}
+                            <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                {{ form.password.label(class="form-label") }}
+                {{ form.password(class="form-control", placeholder="Şifrenizi girin", autocomplete="current-password") }}
+                {% if form.password.errors %}
+                    <div class="text-danger mt-1">
+                        {% for error in form.password.errors %}
+                            <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-check">
+                {{ form.remember_me(class="form-check-input") }}
+                {{ form.remember_me.label(class="form-check-label") }}
+            </div>
+            
+            <button type="submit" class="btn-primary">
+                Giriş Yap
+            </button>
+        </form>
+        
+        <div class="auth-links">
+            <a href="{{ url_for('forgot_password') }}">Şifremi unuttum</a>
+        </div>
+        
+        <div class="divider">
+            <span>veya</span>
+        </div>
+        
+        <div class="auth-links">
+            <p style="margin: 0; color: #6b7280;">Hesabınız yok mu? 
+                <a href="{{ url_for('register') }}">Ücretsiz kayıt olun</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Form validation
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        const inputs = form.querySelectorAll('.form-control');
+        
+        inputs.forEach(input => {
+            input.addEventListener('blur', function() {
+                validateField(this);
+            });
+            
+            input.addEventListener('input', function() {
+                if (this.classList.contains('is-invalid')) {
+                    validateField(this);
+                }
+            });
+        });
+        
+        function validateField(field) {
+            const value = field.value.trim();
+            let isValid = true;
+            
+            // Remove previous validation classes
+            field.classList.remove('is-valid', 'is-invalid');
+            
+            if (field.type === 'email') {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                isValid = emailRegex.test(value);
+            } else if (field.type === 'password') {
+                isValid = value.length >= 6;
+            } else {
+                isValid = value.length > 0;
+            }
+            
+            field.classList.add(isValid ? 'is-valid' : 'is-invalid');
+        }
+        
+        // Auto-hide flash messages
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(alert => {
+            setTimeout(() => {
+                alert.style.opacity = '0';
+                alert.style.transform = 'translateY(-10px)';
+                setTimeout(() => {
+                    alert.remove();
+                }, 300);
+            }, 5000);
+        });
+    });
+</script>
+{% endblock %}

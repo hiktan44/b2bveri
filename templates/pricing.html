@@ -1,0 +1,573 @@
+{% extends "base_saas.html" %}
+
+{% block title %}Fiyatlandırma - B2B Veri{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Hero Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="text-center">
+                <h1 class="display-4 fw-bold mb-3">Basit ve Şeffaf Fiyatlandırma</h1>
+                <p class="lead text-muted mb-4">
+                    İhtiyacınıza uygun planı seçin ve hemen başlayın. Tüm planlar 14 gün ücretsiz deneme ile gelir.
+                </p>
+                
+                <!-- Billing Toggle -->
+                <div class="d-flex justify-content-center align-items-center mb-4">
+                    <span class="me-3">Aylık</span>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="billingToggle">
+                        <label class="form-check-label" for="billingToggle"></label>
+                    </div>
+                    <span class="ms-3">Yıllık <span class="badge bg-success ms-1">%20 İndirim</span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pricing Cards -->
+    <div class="row justify-content-center mb-5">
+        <!-- Free Plan -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="fas fa-rocket text-primary" style="font-size: 3rem;"></i>
+                    </div>
+                    <h4 class="fw-bold mb-2">Başlangıç</h4>
+                    <p class="text-muted mb-4">Küçük işletmeler için ideal</p>
+                    
+                    <div class="mb-4">
+                        <div class="pricing-amount">
+                            <span class="h2 fw-bold monthly-price">₺0</span>
+                            <span class="h2 fw-bold yearly-price d-none">₺0</span>
+                            <span class="text-muted">/ay</span>
+                        </div>
+                        <small class="text-muted yearly-savings d-none">Yıllık ödeme ile ücretsiz</small>
+                    </div>
+                    
+                    <ul class="list-unstyled mb-4">
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Günde 10 arama
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Temel filtreleme
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            CSV dışa aktarım
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            E-posta desteği
+                        </li>
+                        <li class="mb-2 text-muted">
+                            <i class="fas fa-times text-muted me-2"></i>
+                            API erişimi
+                        </li>
+                        <li class="mb-2 text-muted">
+                            <i class="fas fa-times text-muted me-2"></i>
+                            Gelişmiş analitik
+                        </li>
+                    </ul>
+                    
+                    {% if current_user.is_authenticated and current_user.subscription_plan == 'free' %}
+                        <button class="btn btn-outline-primary w-100" disabled>
+                            <i class="fas fa-check me-2"></i>Mevcut Planınız
+                        </button>
+                    {% else %}
+                        <a href="{{ url_for('register') }}" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-rocket me-2"></i>Ücretsiz Başla
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pro Plan -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-primary shadow h-100 position-relative">
+                <div class="position-absolute top-0 start-50 translate-middle">
+                    <span class="badge bg-primary px-3 py-2">En Popüler</span>
+                </div>
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="fas fa-star text-warning" style="font-size: 3rem;"></i>
+                    </div>
+                    <h4 class="fw-bold mb-2">Profesyonel</h4>
+                    <p class="text-muted mb-4">Büyüyen işletmeler için</p>
+                    
+                    <div class="mb-4">
+                        <div class="pricing-amount">
+                            <span class="h2 fw-bold monthly-price">₺299</span>
+                            <span class="h2 fw-bold yearly-price d-none">₺239</span>
+                            <span class="text-muted">/ay</span>
+                        </div>
+                        <small class="text-success yearly-savings d-none">Yıllık ödeme ile ₺720 tasarruf</small>
+                    </div>
+                    
+                    <ul class="list-unstyled mb-4">
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Günde 500 arama
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Gelişmiş filtreleme
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Excel/CSV/JSON dışa aktarım
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            API erişimi (1000 çağrı/ay)
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Arama geçmişi
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Öncelikli destek
+                        </li>
+                    </ul>
+                    
+                    {% if current_user.is_authenticated and current_user.subscription_plan == 'pro' %}
+                        <button class="btn btn-primary w-100" disabled>
+                            <i class="fas fa-check me-2"></i>Mevcut Planınız
+                        </button>
+                    {% else %}
+                        <button class="btn btn-primary w-100" onclick="subscribeToPlan('pro')">
+                            <i class="fas fa-star me-2"></i>14 Gün Ücretsiz Dene
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Enterprise Plan -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="fas fa-crown text-warning" style="font-size: 3rem;"></i>
+                    </div>
+                    <h4 class="fw-bold mb-2">Kurumsal</h4>
+                    <p class="text-muted mb-4">Büyük organizasyonlar için</p>
+                    
+                    <div class="mb-4">
+                        <div class="pricing-amount">
+                            <span class="h2 fw-bold monthly-price">₺999</span>
+                            <span class="h2 fw-bold yearly-price d-none">₺799</span>
+                            <span class="text-muted">/ay</span>
+                        </div>
+                        <small class="text-success yearly-savings d-none">Yıllık ödeme ile ₺2400 tasarruf</small>
+                    </div>
+                    
+                    <ul class="list-unstyled mb-4">
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Sınırsız arama
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Tüm filtreler
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Tüm dışa aktarım formatları
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Sınırsız API erişimi
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Gelişmiş analitik
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            7/24 telefon desteği
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Özel entegrasyon
+                        </li>
+                    </ul>
+                    
+                    {% if current_user.is_authenticated and current_user.subscription_plan == 'enterprise' %}
+                        <button class="btn btn-warning w-100" disabled>
+                            <i class="fas fa-check me-2"></i>Mevcut Planınız
+                        </button>
+                    {% else %}
+                        <button class="btn btn-warning w-100" onclick="subscribeToPlan('enterprise')">
+                            <i class="fas fa-crown me-2"></i>14 Gün Ücretsiz Dene
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feature Comparison -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 text-center py-4">
+                    <h3 class="fw-bold mb-0">Detaylı Özellik Karşılaştırması</h3>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="border-0 py-3">Özellikler</th>
+                                    <th class="border-0 py-3 text-center">Başlangıç</th>
+                                    <th class="border-0 py-3 text-center">Profesyonel</th>
+                                    <th class="border-0 py-3 text-center">Kurumsal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="fw-medium">Günlük Arama Limiti</td>
+                                    <td class="text-center">10</td>
+                                    <td class="text-center">500</td>
+                                    <td class="text-center">Sınırsız</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-medium">API Çağrısı (Aylık)</td>
+                                    <td class="text-center"><i class="fas fa-times text-muted"></i></td>
+                                    <td class="text-center">1,000</td>
+                                    <td class="text-center">Sınırsız</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-medium">Dışa Aktarım Formatları</td>
+                                    <td class="text-center">CSV</td>
+                                    <td class="text-center">CSV, Excel, JSON</td>
+                                    <td class="text-center">Tümü + Özel</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-medium">Arama Geçmişi</td>
+                                    <td class="text-center">7 gün</td>
+                                    <td class="text-center">90 gün</td>
+                                    <td class="text-center">Sınırsız</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-medium">Gelişmiş Filtreler</td>
+                                    <td class="text-center"><i class="fas fa-times text-muted"></i></td>
+                                    <td class="text-center"><i class="fas fa-check text-success"></i></td>
+                                    <td class="text-center"><i class="fas fa-check text-success"></i></td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-medium">Analitik Dashboard</td>
+                                    <td class="text-center">Temel</td>
+                                    <td class="text-center">Gelişmiş</td>
+                                    <td class="text-center">Tam Özellikli</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-medium">Destek</td>
+                                    <td class="text-center">E-posta</td>
+                                    <td class="text-center">E-posta + Chat</td>
+                                    <td class="text-center">7/24 Telefon</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-medium">SLA Garantisi</td>
+                                    <td class="text-center"><i class="fas fa-times text-muted"></i></td>
+                                    <td class="text-center">99.5%</td>
+                                    <td class="text-center">99.9%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="text-center mb-5">
+                <h3 class="fw-bold mb-3">Sıkça Sorulan Sorular</h3>
+                <p class="text-muted">Fiyatlandırma ile ilgili merak ettikleriniz</p>
+            </div>
+            
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="accordion" id="faqAccordion">
+                        <div class="accordion-item border-0 shadow-sm mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                    Ücretsiz deneme süresi nasıl çalışır?
+                                </button>
+                            </h2>
+                            <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Tüm ücretli planlar 14 gün ücretsiz deneme ile gelir. Bu süre boyunca planın tüm özelliklerini kullanabilirsiniz. Deneme süresi sonunda otomatik olarak ücretlendirme başlar, istediğiniz zaman iptal edebilirsiniz.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item border-0 shadow-sm mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                    Planımı istediğim zaman değiştirebilir miyim?
+                                </button>
+                            </h2>
+                            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Evet, planınızı istediğiniz zaman yükseltebilir veya düşürebilirsiniz. Yükseltme anında geçerli olur, düşürme ise bir sonraki fatura döneminde geçerli olur.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item border-0 shadow-sm mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                    Hangi ödeme yöntemlerini kabul ediyorsunuz?
+                                </button>
+                            </h2>
+                            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Kredi kartı, banka kartı ve havale ile ödeme kabul ediyoruz. Tüm ödemeler SSL ile güvence altındadır ve Stripe üzerinden işlenir.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item border-0 shadow-sm mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                    Kurumsal indirimler var mı?
+                                </button>
+                            </h2>
+                            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Evet, kurumsal müşterilerimiz için özel fiyatlandırma ve özelleştirmeler sunuyoruz. Satış ekibimizle iletişime geçin.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item border-0 shadow-sm mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                                    Para iade garantiniz var mı?
+                                </button>
+                            </h2>
+                            <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Evet, ilk 30 gün içinde memnun kalmazsanız tam para iadesi yapıyoruz. Herhangi bir soru sorulmaz.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card bg-primary text-white border-0 shadow">
+                <div class="card-body text-center py-5">
+                    <h3 class="fw-bold mb-3">Hala Karar Veremediniz mi?</h3>
+                    <p class="lead mb-4">
+                        Uzmanlarımızla konuşun ve size en uygun planı bulalım.
+                    </p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a href="mailto:sales@b2bveri.com" class="btn btn-light btn-lg">
+                            <i class="fas fa-envelope me-2"></i>E-posta Gönder
+                        </a>
+                        <a href="tel:+902121234567" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-phone me-2"></i>Bizi Arayın
+                        </a>
+                        <button type="button" class="btn btn-outline-light btn-lg" data-bs-toggle="modal" data-bs-target="#demoModal">
+                            <i class="fas fa-play me-2"></i>Demo İsteyin
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Demo Request Modal -->
+<div class="modal fade" id="demoModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Demo Talep Formu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="demoForm">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="demoName" class="form-label">Ad Soyad *</label>
+                            <input type="text" class="form-control" id="demoName" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="demoEmail" class="form-label">E-posta *</label>
+                            <input type="email" class="form-control" id="demoEmail" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="demoPhone" class="form-label">Telefon</label>
+                            <input type="tel" class="form-control" id="demoPhone">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="demoCompany" class="form-label">Şirket *</label>
+                            <input type="text" class="form-control" id="demoCompany" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="demoEmployees" class="form-label">Çalışan Sayısı</label>
+                            <select class="form-select" id="demoEmployees">
+                                <option value="">Seçiniz</option>
+                                <option value="1-10">1-10</option>
+                                <option value="11-50">11-50</option>
+                                <option value="51-200">51-200</option>
+                                <option value="201-1000">201-1000</option>
+                                <option value="1000+">1000+</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="demoInterest" class="form-label">İlgilendiğiniz Plan</label>
+                            <select class="form-select" id="demoInterest">
+                                <option value="">Seçiniz</option>
+                                <option value="pro">Profesyonel</option>
+                                <option value="enterprise">Kurumsal</option>
+                                <option value="custom">Özel Çözüm</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label for="demoMessage" class="form-label">Mesajınız</label>
+                            <textarea class="form-control" id="demoMessage" rows="3" 
+                                      placeholder="Özel gereksinimlerinizi veya sorularınızı belirtin..."></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                <button type="button" class="btn btn-primary" id="submitDemo">
+                    <i class="fas fa-paper-plane me-2"></i>Demo Talep Et
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Billing toggle functionality
+    $('#billingToggle').on('change', function() {
+        if ($(this).is(':checked')) {
+            // Show yearly prices
+            $('.monthly-price').addClass('d-none');
+            $('.yearly-price').removeClass('d-none');
+            $('.yearly-savings').removeClass('d-none');
+        } else {
+            // Show monthly prices
+            $('.monthly-price').removeClass('d-none');
+            $('.yearly-price').addClass('d-none');
+            $('.yearly-savings').addClass('d-none');
+        }
+    });
+    
+    // Demo form submission
+    $('#submitDemo').on('click', function() {
+        const form = $('#demoForm')[0];
+        if (form.checkValidity()) {
+            // Collect form data
+            const formData = {
+                name: $('#demoName').val(),
+                email: $('#demoEmail').val(),
+                phone: $('#demoPhone').val(),
+                company: $('#demoCompany').val(),
+                employees: $('#demoEmployees').val(),
+                interest: $('#demoInterest').val(),
+                message: $('#demoMessage').val()
+            };
+            
+            // Submit demo request
+            $.ajax({
+                url: '{{ url_for("main.request_demo") }}',
+                method: 'POST',
+                data: formData,
+                headers: {
+                    'X-CSRFToken': $('meta[name=csrf-token]').attr('content')
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $('#demoModal').modal('hide');
+                        showToast('Demo talebiniz alındı. En kısa sürede sizinle iletişime geçeceğiz.', 'success');
+                        form.reset();
+                    } else {
+                        showToast('Hata: ' + response.message, 'error');
+                    }
+                },
+                error: function() {
+                    showToast('Bir hata oluştu. Lütfen tekrar deneyin.', 'error');
+                }
+            });
+        } else {
+            form.reportValidity();
+        }
+    });
+});
+
+// Subscription function
+function subscribeToPlan(plan) {
+    // Check if user is authenticated by looking for user data
+    var userElement = document.querySelector('[data-user-authenticated]');
+    var isAuthenticated = userElement && userElement.dataset.userAuthenticated === 'true';
+    
+    if (isAuthenticated) {
+        const isYearly = $('#billingToggle').is(':checked');
+        const interval = isYearly ? 'year' : 'month';
+        
+        // Show loading state
+        const button = event.target;
+        const originalText = button.innerHTML;
+        button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Yönlendiriliyor...';
+        button.disabled = true;
+        
+        // Create checkout session
+        $.ajax({
+            url: '/payment/create-checkout-session',
+            method: 'POST',
+            data: {
+                plan: plan,
+                interval: interval
+            },
+            headers: {
+                'X-CSRFToken': $('meta[name=csrf-token]').attr('content')
+            },
+            success: function(response) {
+                if (response.success) {
+                    // Redirect to Stripe Checkout
+                    window.location.href = response.checkout_url;
+                } else {
+                    showToast('Hata: ' + response.message, 'error');
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                }
+            },
+            error: function() {
+                showToast('Bir hata oluştu. Lütfen tekrar deneyin.', 'error');
+                button.innerHTML = originalText;
+                button.disabled = false;
+            }
+        });
+    } else {
+        // Redirect to registration with plan parameter
+        window.location.href = '/auth/register?plan=' + plan;
+    }
+}
+</script>
+{% endblock %}
