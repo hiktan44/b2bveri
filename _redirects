@@ -1,0 +1,9 @@
+# Netlify redirects
+/api/* /.netlify/functions/app/:splat 200
+/app/* /.netlify/functions/app/:splat 200
+/login /.netlify/functions/app/login 200
+/register /.netlify/functions/app/register 200
+/dashboard /.netlify/functions/app/dashboard 200
+
+# Fallback for SPA
+/* /index.html 200

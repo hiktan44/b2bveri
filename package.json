@@ -1,0 +1,26 @@
+{
+  "name": "b2bveri",
+  "version": "1.0.0",
+  "description": "B2B Veri Toplayıcı - Ülke bazlı kesin filtreleme sistemi",
+  "main": "app.py",
+  "scripts": {
+    "build": "echo 'Build completed'",
+    "start": "python app.py",
+    "dev": "python app.py"
+  },
+  "keywords": [
+    "b2b",
+    "data",
+    "scraping",
+    "flask",
+    "python"
+  ],
+  "author": "Hikmet Tanrıverdi",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hikmettanriverdi/b2bveri.git"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
