@@ -189,7 +189,13 @@
         document.querySelectorAll('.social-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const provider = this.textContent.trim();
-                alert(`${provider} ile giriş yapılıyor... (Demo amaçlı)`);
+                if (provider.includes('Google')) {
+                    alert('Google ile giriş özelliği yakında aktif olacak!');
+                } else if (provider.includes('LinkedIn')) {
+                    alert('LinkedIn ile giriş özelliği yakında aktif olacak!');
+                } else {
+                    alert(`${provider} ile giriş yapılıyor... (Demo amaçlı)`);
+                }
             });
         });
     </script>

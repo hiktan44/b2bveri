@@ -75,6 +75,30 @@
             color: white;
         }
         
+        .social-btn {
+            border: 2px solid #e9ecef;
+            color: #6c757d;
+            padding: 12px;
+            border-radius: 10px;
+            width: 100%;
+            margin: 5px 0;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .social-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .social-btn:focus {
+            border-color: #667eea;
+            color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
         .feature-item {
             display: flex;
             align-items: center;
@@ -265,6 +289,25 @@
                     </button>
                 </form>
                 
+                <div class="text-center mb-3">
+                    <small class="text-muted">veya</small>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-6">
+                        <button class="btn social-btn" id="googleRegister">
+                            <i class="fab fa-google me-2"></i>
+                            Google
+                        </button>
+                    </div>
+                    <div class="col-6">
+                        <button class="btn social-btn" id="linkedinRegister">
+                            <i class="fab fa-linkedin me-2"></i>
+                            LinkedIn
+                        </button>
+                    </div>
+                </div>
+                
                 <div class="text-center">
                     <a href="/" class="text-decoration-none">
                         <i class="fas fa-arrow-left me-2"></i>
@@ -307,6 +350,17 @@
             } else {
                 this.setCustomValidity('');
             }
+        });
+        
+        // Social media registration
+        document.getElementById('googleRegister').addEventListener('click', function() {
+            // Google OAuth integration would go here
+            alert('Google ile kayıt özelliği yakında aktif olacak!');
+        });
+        
+        document.getElementById('linkedinRegister').addEventListener('click', function() {
+            // LinkedIn OAuth integration would go here
+            alert('LinkedIn ile kayıt özelliği yakında aktif olacak!');
         });
     </script>
 </body>
