@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B2B Veri Toplayıcı - Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+        }
+        
+        .navbar {
+            background: var(--primary-gradient);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white !important;
+        }
+        
+        .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 500;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-nav .nav-link:hover {
+            color: white !important;
+            transform: translateY(-2px);
+        }
+        
+        .sidebar {
+            background: white;
+            min-height: calc(100vh - 76px);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            padding: 30px 0;
+        }
+        
+        .sidebar .nav-link {
+            color: #6c757d;
+            padding: 15px 30px;
+            border-radius: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background: var(--primary-gradient);
+            color: white;
+        }
+        
+        .main-content {
+            padding: 30px;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .stats-card {
+            text-align: center;
+            padding: 30px 20px;
+        }
+        
+        .stats-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 24px;
+            color: white;
+        }
+        
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .stats-label {
+            color: #6c757d;
+            font-weight: 500;
+        }
+        
+        .chart-card {
+            padding: 30px;
+        }
+        
+        .recent-activity {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .activity-item {
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        
+        .activity-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+        
+        .btn-gradient {
+            background: var(--primary-gradient);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+        
+        .progress {
+            height: 8px;
+            border-radius: 10px;
+        }
+        
+        .table {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .table thead th {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-database me-2"></i>
+                B2B Veri Toplayıcı
+            </a>
+            <div class="navbar-nav ms-auto">
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle me-2"></i>
+                        Kullanıcı Adı
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Profil</a></li>
+                        <li><a class="dropdown-item" href="#">Ayarlar</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/">Çıkış</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 p-0">
+                <div class="sidebar">
+                    <nav class="nav flex-column">
+                        <a class="nav-link active" href="#">
+                            <i class="fas fa-tachometer-alt me-2"></i>
+                            Dashboard
+                        </a>
+                        <a class="nav-link" href="/app">
+                            <i class="fas fa-search me-2"></i>
+                            Veri Arama
+                        </a>
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-chart-bar me-2"></i>
+                            Raporlar
+                        </a>
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-download me-2"></i>
+                            Export
+                        </a>
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-cog me-2"></i>
+                            Ayarlar
+                        </a>
+                    </nav>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-md-10">
+                <div class="main-content">
+                    <!-- Welcome Section -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h2>Dashboard</h2>
+                            <p class="text-muted">Hoş geldiniz! İşte hesabınızın genel durumu.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Stats Cards -->
+                    <div class="row mb-4">
+                        <div class="col-md-3 mb-3">
+                            <div class="card stats-card">
+                                <div class="stats-icon" style="background: var(--primary-gradient);">
+                                    <i class="fas fa-database"></i>
+                                </div>
+                                <div class="stats-number">12,547</div>
+                                <div class="stats-label">Toplam Veri</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card stats-card">
+                                <div class="stats-icon" style="background: var(--success-gradient);">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <div class="stats-number">1,247</div>
+                                <div class="stats-label">Bu Ay Arama</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card stats-card">
+                                <div class="stats-icon" style="background: var(--secondary-gradient);">
+                                    <i class="fas fa-download"></i>
+                                </div>
+                                <div class="stats-number">856</div>
+                                <div class="stats-label">Export İşlemi</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card stats-card">
+                                <div class="stats-icon" style="background: var(--warning-gradient); color: #333;">
+                                    <i class="fas fa-globe"></i>
+                                </div>
+                                <div class="stats-number">47</div>
+                                <div class="stats-label">Ülke</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Charts Row -->
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <div class="card chart-card">
+                                <h5 class="mb-4">
+                                    <i class="fas fa-chart-line me-2"></i>
+                                    Aylık Veri Toplama Trendi
+                                </h5>
+                                <canvas id="monthlyChart" height="100"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card chart-card">
+                                <h5 class="mb-4">
+                                    <i class="fas fa-chart-pie me-2"></i>
+                                    Sektör Dağılımı
+                                </h5>
+                                <canvas id="sectorChart" height="200"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Activity & Quick Actions -->
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">
+                                        <i class="fas fa-clock me-2"></i>
+                                        Son Aktiviteler
+                                    </h5>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="recent-activity">
+                                        <div class="activity-item d-flex align-items-center">
+                                            <div class="activity-icon me-3" style="background: var(--success-gradient);">
+                                                <i class="fas fa-download"></i>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <strong>CSV Export Tamamlandı</strong>
+                                                <div class="text-muted small">1,247 kayıt başarıyla export edildi</div>
+                                            </div>
+                                            <small class="text-muted">2 dakika önce</small>
+                                        </div>
+                                        <div class="activity-item d-flex align-items-center">
+                                            <div class="activity-icon me-3" style="background: var(--primary-gradient);">
+                                                <i class="fas fa-search"></i>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <strong>Yeni Arama Yapıldı</strong>
+                                                <div class="text-muted small">Teknoloji sektörü - Türkiye</div>
+                                            </div>
+                                            <small class="text-muted">15 dakika önce</small>
+                                        </div>
+                                        <div class="activity-item d-flex align-items-center">
+                                            <div class="activity-icon me-3" style="background: var(--secondary-gradient);">
+                                                <i class="fas fa-plus"></i>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <strong>Yeni Veri Eklendi</strong>
+                                                <div class="text-muted small">156 yeni şirket verisi</div>
+                                            </div>
+                                            <small class="text-muted">1 saat önce</small>
+                                        </div>
+                                        <div class="activity-item d-flex align-items-center">
+                                            <div class="activity-icon me-3" style="background: var(--warning-gradient); color: #333;">
+                                                <i class="fas fa-chart-bar"></i>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <strong>Rapor Oluşturuldu</strong>
+                                                <div class="text-muted small">Aylık analiz raporu hazır</div>
+                                            </div>
+                                            <small class="text-muted">3 saat önce</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">
+                                        <i class="fas fa-bolt me-2"></i>
+                                        Hızlı İşlemler
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-grid gap-3">
+                                        <button class="btn btn-gradient">
+                                            <i class="fas fa-search me-2"></i>
+                                            Yeni Arama
+                                        </button>
+                                        <button class="btn btn-outline-primary">
+                                            <i class="fas fa-download me-2"></i>
+                                            Veri Export
+                                        </button>
+                                        <button class="btn btn-outline-success">
+                                            <i class="fas fa-chart-bar me-2"></i>
+                                            Rapor Oluştur
+                                        </button>
+                                        <button class="btn btn-outline-info">
+                                            <i class="fas fa-cog me-2"></i>
+                                            Ayarlar
+                                        </button>
+                                    </div>
+                                    
+                                    <hr class="my-4">
+                                    
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>Aylık Kullanım</span>
+                                            <span>78%</span>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar" style="width: 78%; background: var(--primary-gradient);"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>Depolama</span>
+                                            <span>45%</span>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar" style="width: 45%; background: var(--success-gradient);"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Monthly Chart
+        const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+        new Chart(monthlyCtx, {
+            type: 'line',
+            data: {
+                labels: ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz'],
+                datasets: [{
+                    label: 'Toplanan Veri',
+                    data: [1200, 1900, 3000, 5000, 2000, 3000],
+                    borderColor: '#667eea',
+                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        
+        // Sector Chart
+        const sectorCtx = document.getElementById('sectorChart').getContext('2d');
+        new Chart(sectorCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Teknoloji', 'Finans', 'Sağlık', 'E-ticaret', 'Diğer'],
+                datasets: [{
+                    data: [35, 25, 20, 15, 5],
+                    backgroundColor: [
+                        '#667eea',
+                        '#764ba2',
+                        '#f093fb',
+                        '#f5576c',
+                        '#4facfe'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+        
+        // Quick action buttons
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (this.textContent.includes('Yeni Arama')) {
+                    window.location.href = '/app';
+                } else {
+                    const action = this.textContent.trim();
+                    alert(`${action} işlemi başlatıldı! (Demo amaçlı)`);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

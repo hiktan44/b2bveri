@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B2B Veri Toplayıcı - Giriş</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            max-width: 900px;
+            width: 100%;
+            margin: 20px;
+        }
+        
+        .login-left {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .login-right {
+            padding: 60px 40px;
+        }
+        
+        .form-control {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .btn-login {
+            background: var(--primary-gradient);
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+        
+        .social-btn {
+            border: 2px solid #e9ecef;
+            color: #6c757d;
+            padding: 12px;
+            border-radius: 10px;
+            width: 100%;
+            margin: 5px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .social-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="row g-0">
+            <div class="col-md-6 login-left">
+                <div>
+                    <h2 class="mb-4">
+                        <i class="fas fa-database me-2"></i>
+                        B2B Veri Toplayıcı
+                    </h2>
+                    <p class="lead mb-4">Profesyonel veri toplama ve analiz platformuna hoş geldiniz</p>
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-center mb-3">
+                            <div class="text-center mx-3">
+                                <h3>50K+</h3>
+                                <small>Aktif Kullanıcı</small>
+                            </div>
+                            <div class="text-center mx-3">
+                                <h3>10M+</h3>
+                                <small>Toplanan Veri</small>
+                            </div>
+                        </div>
+                    </div>
+                    <p>Henüz hesabınız yok mu? <a href="/register" class="text-white"><u>Ücretsiz kayıt olun</u></a></p>
+                </div>
+            </div>
+            <div class="col-md-6 login-right">
+                <div class="text-center mb-4">
+                    <h3>Giriş Yap</h3>
+                    <p class="text-muted">Hesabınıza giriş yapın</p>
+                </div>
+                
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label">E-posta</label>
+                        <input type="email" class="form-control" placeholder="E-posta adresinizi girin" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Şifre</label>
+                        <input type="password" class="form-control" placeholder="Şifrenizi girin" required>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mb-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="remember">
+                            <label class="form-check-label" for="remember">
+                                Beni hatırla
+                            </label>
+                        </div>
+                        <a href="#" class="text-decoration-none">Şifremi unuttum</a>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-login mb-4">
+                        <i class="fas fa-sign-in-alt me-2"></i>
+                        Giriş Yap
+                    </button>
+                </form>
+                
+                <div class="text-center mb-3">
+                    <small class="text-muted">veya</small>
+                </div>
+                
+                <div class="row">
+                    <div class="col-6">
+                        <button class="btn social-btn">
+                            <i class="fab fa-google me-2"></i>
+                            Google
+                        </button>
+                    </div>
+                    <div class="col-6">
+                        <button class="btn social-btn">
+                            <i class="fab fa-linkedin me-2"></i>
+                            LinkedIn
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <a href="/" class="text-decoration-none">
+                        <i class="fas fa-arrow-left me-2"></i>
+                        Ana sayfaya dön
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Giriş işlemi başarılı! Dashboard\'a yönlendiriliyorsunuz... (Demo amaçlı)');
+            window.location.href = '/dashboard';
+        });
+        
+        document.querySelectorAll('.social-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const provider = this.textContent.trim();
+                alert(`${provider} ile giriş yapılıyor... (Demo amaçlı)`);
+            });
+        });
+    </script>
+</body>
+</html>
