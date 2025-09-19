@@ -1,11 +1,17 @@
 # API routes
 /api/* /.netlify/functions/app/:splat 200
 
-# Direct page redirects
-/app /app.html 200!
-/login /login.html 200!
-/register /register.html 200!
-/dashboard /dashboard.html 200!
+# Static page rewrites (not redirects)
+/app/* /app.html 200
+/login/* /login.html 200
+/register/* /register.html 200
+/dashboard/* /dashboard.html 200
 
-# Fallback
+# Exact matches
+/app /app.html 200
+/login /login.html 200
+/register /register.html 200
+/dashboard /dashboard.html 200
+
+# Fallback for SPA
 /* /index.html 200
