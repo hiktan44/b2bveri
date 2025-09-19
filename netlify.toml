@@ -1,6 +1,6 @@
 [build]
     publish = "."
-    command = "echo 'Build complete - cache cleared - $(date)'"
+    command = "rm -rf .cache && echo 'Build complete - cache cleared - $(date)'"
     environment = { NODE_VERSION = "18" }
 
 [build.environment]
@@ -12,9 +12,12 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    Cache-Control = "no-cache, no-store, must-revalidate"
+    Cache-Control = "no-cache, no-store, must-revalidate, max-age=0"
     Pragma = "no-cache"
     Expires = "0"
+    X-Accel-Expires = "0"
+    Surrogate-Control = "no-store"
+    Vary = "*"
 
 [[redirects]]
   from = "/api/*"
