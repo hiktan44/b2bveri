@@ -1,7 +1,7 @@
 [build]
-  publish = "."
-  command = "echo 'Build complete - $(date)'"
-  environment = { NODE_VERSION = "18" }
+   publish = "."
+   command = "echo 'Build complete - cache cleared - $(date)'"
+   environment = { NODE_VERSION = "18" }
 
 [build.environment]
   PYTHON_VERSION = "3.9"
