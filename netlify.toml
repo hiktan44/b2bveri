@@ -5,13 +5,38 @@
 [build.environment]
   PYTHON_VERSION = "3.9"
 
+[functions]
+  directory = "netlify/functions"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/app/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/app/*"
+  to = "/.netlify/functions/app/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/login"
+  to = "/.netlify/functions/app/login"
+  status = 200
+
+[[redirects]]
+  from = "/register"
+  to = "/.netlify/functions/app/register"
+  status = 200
+
+[[redirects]]
+  from = "/dashboard"
+  to = "/.netlify/functions/app/dashboard"
+  status = 200
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
-[functions]
-  directory = "netlify/functions"
 
 [[headers]]
   for = "/*"
