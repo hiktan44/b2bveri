@@ -1,13 +1,20 @@
 [build]
-   publish = "."
-   command = "echo 'Build complete - cache cleared - $(date)'"
-   environment = { NODE_VERSION = "18" }
+    publish = "."
+    command = "echo 'Build complete - cache cleared - $(date)'"
+    environment = { NODE_VERSION = "18" }
 
 [build.environment]
-  PYTHON_VERSION = "3.9"
+  NODE_VERSION = "18"
 
 [functions]
   directory = "netlify/functions"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+    Pragma = "no-cache"
+    Expires = "0"
 
 [[redirects]]
   from = "/api/*"
