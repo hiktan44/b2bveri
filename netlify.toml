@@ -1,7 +1,8 @@
 [build]
     publish = "."
-    command = "rm -rf .cache && echo 'Build complete - cache cleared - $(date)'"
+    command = "rm -rf .cache && echo 'Build complete - cache cleared - $(date)' && echo 'Force cache bust'"
     environment = { NODE_VERSION = "18" }
+    ignore = "false"
 
 [build.environment]
   NODE_VERSION = "18"
