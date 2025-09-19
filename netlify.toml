@@ -17,21 +17,25 @@
   from = "/app"
   to = "/app.html"
   status = 200
+  force = true
 
 [[redirects]]
   from = "/login"
   to = "/login.html"
   status = 200
+  force = true
 
 [[redirects]]
   from = "/register"
   to = "/register.html"
   status = 200
+  force = true
 
 [[redirects]]
   from = "/dashboard"
   to = "/dashboard.html"
   status = 200
+  force = true
 
 # Catch-all rule must be last
 [[redirects]]
