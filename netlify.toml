@@ -14,24 +14,28 @@
   status = 200
 
 [[redirects]]
-  from = "/app/*"
-  to = "/.netlify/functions/app/:splat"
+  from = "/app"
+  to = "/app.html"
   status = 200
 
 [[redirects]]
   from = "/login"
-  to = "/.netlify/functions/app/login"
+  to = "/login.html"
   status = 200
 
 [[redirects]]
   from = "/register"
-  to = "/.netlify/functions/app/register"
+  to = "/register.html"
   status = 200
 
 [[redirects]]
   from = "/dashboard"
-  to = "/.netlify/functions/app/dashboard"
+  to = "/dashboard.html"
   status = 200
+
+
+
+
 
 [[redirects]]
   from = "/*"
