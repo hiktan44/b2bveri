@@ -1,5 +1,11 @@
 # API routes
 /api/* /.netlify/functions/app/:splat 200
 
+# Force specific redirects for static pages
+/app /app/ 301!
+/login /login/ 301!
+/register /register/ 301!
+/dashboard /dashboard/ 301!
+
 # SPA fallback
 /* /index.html 200
