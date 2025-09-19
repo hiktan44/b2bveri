@@ -33,10 +33,7 @@
   to = "/dashboard.html"
   status = 200
 
-
-
-
-
+# Catch-all rule must be last
 [[redirects]]
   from = "/*"
   to = "/index.html"
