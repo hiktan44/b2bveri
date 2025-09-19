@@ -1,11 +1,22 @@
 import json
 import sys
 import os
+from flask import Flask, render_template_string
 
-# Add the parent directory to the path to import our modules
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+# Simple Flask app for Netlify
+app = Flask(__name__)
 
-from app import app
+@app.route('/')
+def home():
+    return render_template_string('<h1>B2B Veri Toplayıcı</h1><p>Uygulama çalışıyor!</p>')
+
+@app.route('/app')
+def app_page():
+    return render_template_string('<h1>B2B Veri Toplayıcı - Ana Sayfa</h1><p>Uygulama başarıyla çalışıyor!</p>')
+
+@app.route('/login')
+def login():
+    return render_template_string('<h1>Giriş Sayfası</h1><p>Giriş formu burada olacak.</p>')
 
 def handler(event, context):
     """
