@@ -1,11 +1,5 @@
 # API routes
 /api/* /.netlify/functions/app/:splat 200
 
-# Static pages
-/app /app.html 200!
-/login /login.html 200!
-/register /register.html 200!
-/dashboard /dashboard.html 200!
-
-# Fallback for SPA
+# SPA fallback - all routes go to index.html for client-side routing
 /* /index.html 200
