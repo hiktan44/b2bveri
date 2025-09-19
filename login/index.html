@@ -155,9 +155,10 @@
                 
                 <div class="row">
                     <div class="col-6">
-                        <button class="btn social-btn">
+                        <button class="btn social-btn" disabled style="opacity: 0.6; cursor: not-allowed;">
                             <i class="fab fa-google me-2"></i>
                             Google
+                            <br><small style="font-size: 10px;">Yakında Aktif!</small>
                         </button>
                     </div>
                     <div class="col-6">
@@ -189,7 +190,13 @@
         document.querySelectorAll('.social-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const provider = this.textContent.trim();
-                alert(`${provider} ile giriş yapılıyor... (Demo amaçlı)`);
+                if (provider.includes('Google')) {
+                    alert('Google ile giriş özelliği yakında aktif olacak!');
+                } else if (provider.includes('LinkedIn')) {
+                    alert('LinkedIn ile giriş özelliği yakında aktif olacak!');
+                } else {
+                    alert(`${provider} ile giriş yapılıyor... (Demo amaçlı)`);
+                }
             });
         });
     </script>
