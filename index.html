@@ -761,6 +761,37 @@
         });
         
         observer.observe(document.querySelector('.stats-section'));
+        
+        // Client-side routing
+        function handleRouting() {
+            const path = window.location.pathname;
+            
+            if (path === '/app') {
+                fetch('/app.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        document.documentElement.innerHTML = html;
+                    })
+                    .catch(() => {
+                        // Fallback: redirect to app.html
+                        window.location.href = '/app.html';
+                    });
+            } else if (path === '/login') {
+                window.location.href = '/login.html';
+            } else if (path === '/register') {
+                window.location.href = '/register.html';
+            } else if (path === '/dashboard') {
+                window.location.href = '/dashboard.html';
+            }
+        }
+        
+        // Handle initial load
+        if (window.location.pathname !== '/') {
+            handleRouting();
+        }
+        
+        // Handle browser back/forward
+        window.addEventListener('popstate', handleRouting);
     </script>
 </body>
 </html>
