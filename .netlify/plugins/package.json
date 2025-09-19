@@ -1,0 +1,15 @@
+{
+  "name": "netlify-local-plugins",
+  "description": "This directory contains Build plugins that have been automatically installed by Netlify.",
+  "version": "1.0.0",
+  "private": true,
+  "author": "Netlify",
+  "license": "MIT",
+  "dependencies": {
+    "async-workloads-buildhooks": "https://3bd69bc3-080d-4857-a4ab-c6aa5abc63a6.netlify.app/packages/buildhooks.tgz",
+    "baseline-buildhooks": "https://b0650beb-2bfb-4a53-af8a-b8f14c4decaf.netlify.app/packages/buildhooks.tgz",
+    "content-security-policy-buildhooks": "https://d2bc42d4-d04c-4015-9647-53075b3bd3db.netlify.app/packages/buildhooks.tgz",
+    "simpleanalytics-buildhooks": "https://443cbb77-0b8e-4310-a5ec-49601b12e87d.netlify.app/packages/buildhooks.tgz",
+    "user-agent-blocker-buildhooks": "https://229cd987-05ad-4a05-b612-849942d6bec4.netlify.app/packages/buildhooks.tgz"
+  }
+}

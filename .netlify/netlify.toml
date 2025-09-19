@@ -8,11 +8,12 @@ plugins = []
 publish = "/Users/hikmettanriverdi/Downloads/b2bveri"
 publishOrigin = "config"
 commandOrigin = "config"
-command = "echo 'Static site ready'"
+command = "rm -rf .cache && echo 'Build complete - cache cleared - $(date)' && echo 'Force cache bust'"
+ignore = "false"
 functions = "/Users/hikmettanriverdi/Downloads/b2bveri/netlify/functions"
 
 [build.environment]
-PYTHON_VERSION = "3.9"
+NODE_VERSION = "18"
 
 [build.processing]
 
@@ -34,9 +35,29 @@ PYTHON_VERSION = "3.9"
 for = "/*"
 
 [headers.values]
+Cache-Control = "no-cache, no-store, must-revalidate, max-age=0"
+Pragma = "no-cache"
+Expires = "0"
+X-Accel-Expires = "0"
+Surrogate-Control = "no-store"
+Vary = "*"
+
+[[headers]]
+for = "/*"
+
+[headers.values]
 X-Frame-Options = "DENY"
 X-XSS-Protection = "1; mode=block"
 X-Content-Type-Options = "nosniff"
+Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+for = "/*.html"
+
+[headers.values]
+Cache-Control = "no-cache, no-store, must-revalidate, max-age=0"
+Pragma = "no-cache"
+Expires = "0"
 Referrer-Policy = "strict-origin-when-cross-origin"
 
 [[redirects]]
@@ -52,10 +73,10 @@ force = false
 [redirects.headers]
 
 [[redirects]]
-from = "/app/*"
-to = "/.netlify/functions/app/:splat"
+from = "/app"
+to = "/app/index.html"
 status = 200.0
-force = false
+force = true
 
 [redirects.query]
 
@@ -65,9 +86,9 @@ force = false
 
 [[redirects]]
 from = "/login"
-to = "/.netlify/functions/app/login"
+to = "/login/index.html"
 status = 200.0
-force = false
+force = true
 
 [redirects.query]
 
@@ -77,9 +98,9 @@ force = false
 
 [[redirects]]
 from = "/register"
-to = "/.netlify/functions/app/register"
+to = "/register/index.html"
 status = 200.0
-force = false
+force = true
 
 [redirects.query]
 
@@ -89,9 +110,9 @@ force = false
 
 [[redirects]]
 from = "/dashboard"
-to = "/.netlify/functions/app/dashboard"
+to = "/dashboard/index.html"
 status = 200.0
-force = false
+force = true
 
 [redirects.query]
 
