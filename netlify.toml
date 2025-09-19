@@ -26,45 +26,25 @@
 
 [[redirects]]
   from = "/app"
-  to = "/app.html"
+  to = "/app/index.html"
   status = 200
   force = true
 
 [[redirects]]
-  from = "/app"
-  to = "/app.html"
-  status = 200
-
-[[redirects]]
   from = "/login"
-  to = "/login.html"
-  status = 200
-
-[[redirects]]
-  from = "/register"
-  to = "/register.html"
-  status = 200
-
-[[redirects]]
-  from = "/dashboard"
-  to = "/dashboard.html"
-  status = 200
-
-[[redirects]]
-  from = "/login"
-  to = "/login.html"
+  to = "/login/index.html"
   status = 200
   force = true
 
 [[redirects]]
   from = "/register"
-  to = "/register.html"
+  to = "/register/index.html"
   status = 200
   force = true
 
 [[redirects]]
   from = "/dashboard"
-  to = "/dashboard.html"
+  to = "/dashboard/index.html"
   status = 200
   force = true
 
