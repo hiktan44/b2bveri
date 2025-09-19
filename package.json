@@ -21,6 +21,15 @@
     "type": "git",
     "url": "https://github.com/hikmettanriverdi/b2bveri.git"
   },
-  "dependencies": {},
-  "devDependencies": {}
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "@netlify/mcp": "^1.0.0"
+  },
+  "devDependencies": {},
+  "mcpServers": {
+    "netlify": {
+      "command": "npx",
+      "args": ["-y", "@netlify/mcp"]
+    }
+  }
 }
